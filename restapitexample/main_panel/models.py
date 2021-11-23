@@ -14,8 +14,9 @@ class Genre(models.Model):
     update_date= models.DateTimeField(auto_now=True)
 
 class Book(models.Model):
-    book = models.ForeignKey(Author, on_delete=models.CASCADE)
-    title = models.ManyToManyField(Genre)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    genre = models.ManyToManyField(Genre)
     isbn = models.CharField(max_length=12, unique=True)
     description = models.TextField(max_length=1500)
     create_date= models.DateTimeField(auto_now_add=True)
