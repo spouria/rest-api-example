@@ -16,19 +16,34 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from rest_framework import routers
+from rest_framework_nested import routers
 from main_panel import views
 
 
 router = routers.DefaultRouter()
-router.register(r'author', views.AuthorViewSet)
-router.register(r'book', views.BookViewSet)
-router.register(r'genre', views.GenreViewSet)
+router.register(r'author', views.AuthorViewSet, basename='author')
+router.register(r'book', views.BookViewSet, basename='book')
+router.register(r'genre', views.GenreViewSet, basename='genre')
+router.register(r'comment', views.CommentViewSet, basename='comment')
+router.register(r'user', views.UserViewSet)
+
+author_router = routers.NestedDefaultRouter(router, r'author', lookup='author')
+author_router.register(r'book', views.BookViewSet, basename='author-books')
+
+genre_router = routers.NestedDefaultRouter(router, r'genre', lookup='genre')
+genre_router.register(r'book', views.BookViewSet, basename='genre-books')
+
+book_router = routers.NestedDefaultRouter(router, r'book', lookup='book')
+book_router.register(r'comment', views.CommentViewSet, basename='book-comments')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', include(router.urls)),
+    path('', include(author_router.urls)),
+    path('', include(genre_router.urls)),
+    path('', include(book_router.urls)),
+
     #Path for Browsable API
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
