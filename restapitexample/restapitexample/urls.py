@@ -45,5 +45,5 @@ urlpatterns = [
     path('', include(book_router.urls)),
 
     #Path for Browsable API
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    #path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
